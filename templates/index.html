@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blockly C Compiler</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+</head>
+<body>
+  <h1>Blockly to C Compiler</h1>
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+  <xml id="toolbox" style="display: none">
+    <category name="Logic">
+      <block type="controls_if"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_compare"></block>
+      
+    </category>
+    <category name="Loops">
+      <block type="controls_repeat_ext"></block>
+      <block type="controls_whileUntil"></block>
+      
+    </category>
+    <category name="Operations">
+      <block type="right_turn_block"></block>
+      <block type="left_turn_block"></block>
+      <block type="printf_block"></block>
+    </category>
+    <category name="Math">
+      <block type="math_number"></block>
+    </category>
+    <category name="Text">
+      <block type="text"></block>
+    </category>
+  </xml>
+
+  <button id="generateBtn">Generate & Compile</button>
+  <pre id="output"></pre>
+
+  <script src="/static/js/generators_c.js"></script>
+  <script src="/static/js/blockly_app.js"></script>
+</body>
+</html>
