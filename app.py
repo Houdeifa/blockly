@@ -18,12 +18,13 @@ ARM_TOOL_CHAIN_OBJCOPY_DIR = os.path.join(ARM_TOOL_CHAIN_BIN_DIR, 'arm-none-eabi
 print(CODE_DIR)
 os.makedirs(CODE_DIR, exist_ok=True)
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
 def cast_func_address(addr):
-    return f"((void (*)(int)) {addr})"
+    return f"((void (*)(int)) (*(uint32_t*){addr}))"
 
 @app.route('/compile', methods=['POST'])
 def compile_code():
@@ -35,7 +36,7 @@ def compile_code():
         f.write(c_code)
 
 
-    functions = {'turnRight':'0x8000','turnLeft':'0x8000'}
+    functions = {'UTILTY1':"0x20005700",'UTILTY2':"0x20005704",'UTILTY3':"0x20005708"}
 
     defines = []
     for key,value in functions.items():

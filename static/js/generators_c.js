@@ -26,7 +26,7 @@ Object.assign(Blockly.C, {
 
 Blockly.C.finish = function(code) {
   const defs = Object.values(Blockly.C.definitions_).join('\n');
-  return defs + '#include <stdbool.h>\nint main_entery(void) {\n' + code + '\n  return 0;\n}';
+  return defs + '#include <stdbool.h>\n#include <stdint.h>\nint main_entery(void) {\n' + code + '\n  return 0;\n}';
 };
 
 Blockly.C.scrub_ = function(block, code) {
@@ -170,7 +170,7 @@ Blockly.Blocks['right_turn_block'] = {
 Blockly.C.forBlock['right_turn_block'] = function(block, generator) {
   const condition = Blockly.C.valueToCode(block, 'DELTA',  Blockly.C.ORDER_NONE) || 0;
   // Atomic order is appropriate for a literal
-  return 'turnRight(' + condition.replace(/(\r\n|\n|\r)/gm,"") + ');';
+  return 'UTILTY1(' + condition.replace(/(\r\n|\n|\r)/gm,"") + ');';
 };
 
 
@@ -193,7 +193,7 @@ Blockly.Blocks['left_turn_block'] = {
 Blockly.C.forBlock['left_turn_block'] = function(block, generator) {
   const condition = Blockly.C.valueToCode(block, 'DELTA',  Blockly.C.ORDER_NONE) || 0;
   // Atomic order is appropriate for a literal
-  return 'turnLeft(' + condition.replace(/(\r\n|\n|\r)/gm,"") + ');';
+  return 'UTILTY2(' + condition.replace(/(\r\n|\n|\r)/gm,"") + ');';
 };
 
 
