@@ -46,7 +46,6 @@
   <script>
     
 {% for function in functions %}
-
 const {{function.key_name}}Json = {
   "type": "{{function.key_name}}_block",        // ← Required!
   "message0": "{{function.display_name}} %1",

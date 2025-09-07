@@ -46,8 +46,10 @@ def compile_code():
 
     defines = []
     for i,function in enumerate(functions):
-      addr = starting_addr + i*4
-      _,func_name = function
+      # assuming each function address is 4 bytes apart
+      # the functions need to be added in the same order as in functions.json
+      addr = starting_addr + i*4 
+      func_name = function["func_name"]
       defines.append('-D')
       defines.append(f'{func_name}={cast_func_address(str(hex(addr)))}')
     # compile with ARM toolchain (compile-only, no linking)
