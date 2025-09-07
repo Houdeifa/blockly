@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import os
 import subprocess
-
+import json
 app = Flask(__name__)
 
 
@@ -18,10 +18,18 @@ ARM_TOOL_CHAIN_OBJCOPY_DIR = os.path.join(ARM_TOOL_CHAIN_BIN_DIR, 'arm-none-eabi
 print(CODE_DIR)
 os.makedirs(CODE_DIR, exist_ok=True)
 
+starting_addr = 0x20005700
+# predefined functions available to user code
+# format: {'display_name': 'Function 1', 'func_name': 'FUNC1}
+
+
+json_path = os.path.join(CURRENT_DIR, 'functions.json')
+with open(json_path, 'r') as f:
+    functions = json.load(f)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', functions=functions)
 
 def cast_func_address(addr):
     return f"((void (*)(int)) (*(uint32_t*){addr}))"
@@ -36,12 +44,12 @@ def compile_code():
         f.write(c_code)
 
 
-    functions = {'UTILTY1':"0x20005700",'UTILTY2':"0x20005704",'UTILTY3':"0x20005708"}
-
     defines = []
-    for key,value in functions.items():
+    for i,function in enumerate(functions):
+      addr = starting_addr + i*4
+      _,func_name = function
       defines.append('-D')
-      defines.append(f'{key}={cast_func_address(value)}')
+      defines.append(f'{func_name}={cast_func_address(str(hex(addr)))}')
     # compile with ARM toolchain (compile-only, no linking)
     output_obj = filepath.replace('.c', '.o')
     output_bin = filepath.replace('.c', '.bin')
@@ -68,3 +76,6 @@ def compile_code():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# Note: The serial_send_program.py script is assumed to be in the same directory as app.py and is used to send the compiled binary over serial.
+# You can run it separately after compiling the code via the Flask app.

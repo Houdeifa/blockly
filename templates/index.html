@@ -25,9 +25,11 @@
       
     </category>
     <category name="Operations">
-      <block type="right_turn_block"></block>
-      <block type="left_turn_block"></block>
-      <block type="printf_block"></block>
+      
+{% for function in functions %}
+      <block type="{{function.key_name}}_block"></block>
+{% endfor %}
+      <!-- <block type="printf_block"></block> -->
     </category>
     <category name="Math">
       <block type="math_number"></block>
@@ -41,6 +43,35 @@
   <pre id="output"></pre>
 
   <script src="/static/js/generators_c.js"></script>
+  <script>
+    
+{% for function in functions %}
+
+const {{function.key_name}}Json = {
+  "type": "{{function.key_name}}_block",        // ← Required!
+  "message0": "{{function.display_name}} %1",
+  "args0": [
+    {"type": "input_value", "name": "DELTA", "check": "{{function.input_type}}"}
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": {{function.display_color}}
+};
+Blockly.Blocks['{{function.key_name}}_block'] = {
+  init: function() {
+    this.jsonInit({{function.key_name}}Json);
+  }
+};
+
+
+Blockly.C.forBlock['{{function.key_name}}_block'] = function(block, generator) {
+  const condition = Blockly.C.valueToCode(block, 'DELTA',  Blockly.C.ORDER_NONE) || 0;
+  // Atomic order is appropriate for a literal
+  return '{{function.func_name}}(' + condition.replace(/(\r\n|\n|\r)/gm,"") + ');';
+};
+
+{% endfor %}
+  </script>
   <script src="/static/js/blockly_app.js"></script>
 </body>
 </html>
